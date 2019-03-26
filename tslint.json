@@ -1,0 +1,30 @@
+{
+    "defaultSeverity": "error",
+    "extends": [ "tslint:recommended", "tslint-eslint-rules" ],
+    "jsRules": {},
+    "rules": {
+        "ban-types": [
+        true,
+        [ "Object", "Avoid using the `Object` type. Did you mean `object`?" ],
+        [ "Boolean", "Avoid using the `Boolean` type. Did you mean `boolean`?" ],
+        [ "Number", "Avoid using the `Number` type. Did you mean `number`?" ],
+        [ "String", "Avoid using the `String` type. Did you mean `string`?" ],
+        [ "Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?" ]
+        ],
+        "interface-name": false,
+        "linebreak-style": [ true, "LF" ],
+        "max-classes-per-file": false,
+        "no-bitwise": false,
+        "only-arrow-functions": false,
+        "object-literal-sort-keys": false,
+        "no-multi-spaces": true,
+        "array-bracket-spacing": true,
+        "block-spacing": true,
+        "object-curly-spacing": true,
+        "variable-name": {
+            "options": ["allow-leading-underscore", "allow-pascal-case" ]
+        }
+    },
+    "rulesDirectory": []
+}
+  

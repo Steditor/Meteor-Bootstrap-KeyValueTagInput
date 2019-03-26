@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "es2015",
+        "target": "es5",
+        "lib": [ "es2017", "dom" ],
+        "moduleResolution": "node",
+        "alwaysStrict": true,
+        "allowJs": false,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "typeRoots": [ "./typings", "./node_modules/@types" ]
+    },
+    "include": [
+        "src/**/*",
+        "typings/**/*"
+    ],
+    "files": [
+        "index.ts"
+    ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "meteor-bootstrap_key-value-tag-input",
+  "version": "1.0.0",
+  "description": "A reactive input field for tags and key-value data, developed for meteor apps running bootstrap.",
+  "main": "dist/bundle.js",
+  "module": "index.js",
+  "devDependencies": {
+    "@types/jquery": "^3.3.29",
+    "@types/meteor": "^1.4.27",
+    "moment": "^2.24.0",
+    "node-sass": "^4.11.0",
+    "rollup": "^1.7.3",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "tslint": "^5.14.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.3.4000"
+  },
+  "peerDependencies": {
+    "moment": "2.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build-sass && npm run build-ts && npm run rollup && npm run tslint",
+    "build-sass": "node-sass src/keyValueInput/keyValueInput.scss src/keyValueInput/keyValueInput.css",
+    "build-ts": "tsc",
+    "rollup": "rollup --config",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Steditor/Meteor-Bootstrap-KeyValueTagInput.git"
+  },
+  "author": "Stefan Neubert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Steditor/Meteor-Bootstrap-KeyValueTagInput/issues"
+  },
+  "homepage": "https://github.com/Steditor/Meteor-Bootstrap-KeyValueTagInput#readme"
+}

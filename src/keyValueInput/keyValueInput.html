@@ -1,0 +1,67 @@
+<template name="keyValueInput">
+    <div class="form-control key-value-input {{class}}">
+        {{#each entry in defaultEntries}}
+            {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry default=true}}
+        {{/each}}
+        {{#each entry in entries}}
+            {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry}}
+        {{/each}}
+        {{#if and (not isSingle) partialEntry}}
+            {{> keyValueInputEntry isSingle=isSingle entry=partialEntry}}
+        {{/if}}
+        <div class="key-value-text-input-container">
+            <input class="key-value-text-input" type="text" placeholder="{{#unless partialEntry}}{{availableTypes}}{{/unless}}">
+            {{#if suggestions}}
+                <div class="key-value-suggestions card">
+                    {{#if suggestions.header}}
+                        <div class="card-header">
+                            {{{suggestions.header}}}
+                        </div>
+                    {{/if}}
+                    <div class="list-group">
+                        {{#each suggestion in suggestions}}
+                            {{>keyValueSuggestion suggestion=suggestion}}
+                        {{/each}}
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+        <i class="fa fa-times remove-all"></i>
+    </div>
+</template>
+
+<template name="keyValueInputEntry">
+    <div class="key-value-entry {{#if entry.isPartial}}partial{{/if}} {{#if entry.isDefault}}default{{/if}}"  tabindex="{{#unless entry.isDefault}}0{{/unless}}">
+        {{#unless isSingle}}<span class="badge badge-light">{{entry.label}}</span>{{/unless}}
+        {{#unless entry.isPartial}}
+            {{#let display=entry.display}}
+                <span class="badge badge-dark">{{display.text}}{{{display.html}}}{{#unless default}} <i class="fa fa-times"></i>{{/unless}}</span>
+            {{/let}}
+        {{/unless}}
+    </div>
+</template>
+
+<template name="keyValueInputEntryDisplay">
+    <div class="key-value-entry">
+        <span class="badge badge-light">{{entry.label}}</span>
+        {{#let display=entry.display}}
+            <span class="badge badge-dark">{{display.text}}{{{display.html}}}</span>
+        {{/let}}
+    </div>
+</template>
+
+<template name="keyValueSuggestion">
+    <a href="#" class="list-group-item list-group-item-action key-value-suggestion {{#if suggestion.fallback}}key-value-fallback-suggestion{{/if}}">
+        <div class="d-flex w-100 justify-content-between">
+            <h6>{{suggestion.display.text}}{{{suggestion.display.html}}}</h6>
+            <small>
+                {{#if suggestion.matchHtml}}
+                    {{{suggestion.matchHtml}}}
+                {{else}}
+                    {{suggestion.extra}}
+                {{/if}}
+            </small>
+            <kbd>↵</kbd>
+        </div>
+    </a>
+</template>
