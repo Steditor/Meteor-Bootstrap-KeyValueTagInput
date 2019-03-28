@@ -1,5 +1,6 @@
 import { escapeRegexChars } from "../helpers/strings";
-import { KeyValueDisplay, KeyValueSuggestion, KeyValueType } from "./KeyValueType";
+import { KeyValueDisplay, KeyValueSuggestion } from "./KeyValueDatatypes";
+import { KeyValueType } from "./KeyValueType";
 
 interface RegexKeyValue {
     text: string;

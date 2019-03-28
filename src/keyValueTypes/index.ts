@@ -6,8 +6,6 @@ import RegexKeyValueType from "./RegexKeyValueType";
 import SortKeyValueType from "./SortKeyValueType";
 import TagKeyValueType from "./TagKeyValueType";
 
-export * from "./KeyValueType";
-
 export {
     BooleanKeyValueType,
     DateKeyValueType,
@@ -17,3 +15,8 @@ export {
     SortKeyValueType,
     TagKeyValueType,
 };
+
+export * from "./constructionHelpers";
+export * from "./KeyValueDatatypes";
+export * from "./KeyValueEntry";
+export * from "./KeyValueType";

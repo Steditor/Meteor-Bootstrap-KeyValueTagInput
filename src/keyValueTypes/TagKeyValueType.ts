@@ -1,4 +1,5 @@
-import { KeyValueSuggestion, KeyValueTextDisplay, KeyValueType } from "./KeyValueType";
+import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
+import { KeyValueType } from "./KeyValueType";
 
 export default class TagKeyValueType extends KeyValueType<string> {
     private _tags: string[] = [];

@@ -16,6 +16,7 @@
         "typings/**/*"
     ],
     "files": [
-        "index.ts"
+        "src/main.ts",
+        "src/keyValueInput/keyValueInput.ts"
     ]
 }

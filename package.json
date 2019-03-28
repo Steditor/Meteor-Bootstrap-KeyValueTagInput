@@ -1,6 +1,6 @@
 {
   "name": "meteor-bootstrap_key-value-tag-input",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A reactive input field for tags and key-value data, developed for meteor apps running bootstrap.",
   "keywords": [
     "meteor",
@@ -10,14 +10,16 @@
     "suggestions",
     "key-value"
   ],
-  "main": "dist/bundle.js",
-  "module": "index.js",
+  "main": "dist/main.js",
+  "module": "src/main.js",
   "devDependencies": {
     "@types/jquery": "^3.3.29",
     "@types/meteor": "^1.4.27",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
     "rollup": "^1.7.3",
+    "rollup-copy-plugin": "^0.1.0",
+    "rollup-plugin-external-globals": "^0.3.0",
     "rollup-plugin-node-resolve": "^4.0.1",
     "tslint": "^5.14.0",
     "tslint-eslint-rules": "^5.4.0",

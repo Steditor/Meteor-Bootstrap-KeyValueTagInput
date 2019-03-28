@@ -1,4 +1,5 @@
-import { KeyValueSuggestion, KeyValueTextDisplay, KeyValueType } from "./KeyValueType";
+import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
+import { KeyValueType } from "./KeyValueType";
 
 import * as moment_ from "moment";
 const moment = moment_;

@@ -1,6 +1,7 @@
 import { NumberDelimiters } from "../helpers/formatting";
 import { escapeRegexChars } from "../helpers/strings";
-import { KeyValueSuggestion, KeyValueTextDisplay, KeyValueType } from "./KeyValueType";
+import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
+import { KeyValueType } from "./KeyValueType";
 import NumberFormat = Intl.NumberFormat;
 
 type Operator = "<" | ">" | "<=" | ">=" | "!=" | "=";

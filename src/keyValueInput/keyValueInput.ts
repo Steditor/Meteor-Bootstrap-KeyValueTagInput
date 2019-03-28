@@ -3,33 +3,21 @@ import { ReactiveVar } from "meteor/reactive-var";
 import { Template } from "meteor/templating";
 import { Tracker } from "meteor/tracker";
 import { escapeRegexChars } from "../helpers/strings";
-import { KeyValueEntry, KeyValueSuggestion, KeyValueType } from "../keyValueTypes/KeyValueType";
-
-export function clearEntries(keyValueInput: HTMLElement) {
-    keyValueInput.dispatchEvent(new CustomEvent("clearEntries"));
-}
-
-interface KeyValueInputMultipleTypesData {
-    kind?: "multiple";
-    types: Array<KeyValueType<any>>;
-    fallbackType?: number;
-}
-interface KeyValueInputSingleTypeData {
-    kind: "single";
-    type: KeyValueType<any>;
-}
-export type KeyValueInputTemplateData = ( KeyValueInputMultipleTypesData | KeyValueInputSingleTypeData ) & {
-    defaultEntries?: KeyValueEntryConstructionData[];
-    entries?: KeyValueEntryConstructionData[];
-};
+import {
+    createEntriesFromTypes,
+    KeyValueEntry,
+    KeyValueEntryConstructionData,
+    KeyValueSuggestion,
+    KeyValueType,
+} from "../keyValueTypes";
+import {
+    KeyValueEntriesChangedEvent,
+    KeyValueInputMultipleTypesData,
+    KeyValueInputTemplateData,
+} from "./keyValueInputInterfaces";
 
 function KeyValueInputTemplateData(): KeyValueInputTemplateData {
     return Template.currentData() as KeyValueInputTemplateData;
-}
-
-export interface KeyValueEntryConstructionData {
-    key: string;
-    value: string | any;
 }
 
 interface KeyValueEntryData {
@@ -57,9 +45,10 @@ function KeyValueInputTemplate(): KeyValueInputTemplate {
 }
 
 Template.keyValueInput.onCreated(function(this: KeyValueInputTemplate) {
-    if (!this.data.kind) {
-        this.data.kind = "multiple";
-    }
+    this.autorun(() => {
+        const data = KeyValueInputTemplateData();
+        data.kind = data.kind || "multiple";
+    });
 
     this.entries = new ReactiveVar(createEntries(this.data.entries, this));
     this.partialEntry = new ReactiveVar(null);
@@ -364,21 +353,6 @@ function createEntries(entries: KeyValueEntryConstructionData[] | undefined, tem
     return createEntriesFromTypes(entries || [], types);
 }
 
-export function createEntriesFromTypes(entries: KeyValueEntryConstructionData[], types: Array<KeyValueType<any>>) {
-    return entries.map((e) => createEntry(e, types))
-        .filter((entry) => entry !== undefined) as Array<KeyValueEntry<any>>;
-}
-
-function createEntry(e: KeyValueEntryConstructionData, types: Array<KeyValueType<any>>)
-    : KeyValueEntry<any> | undefined {
-    for (const type of types) {
-        if (type.id === e.key) {
-            return type.tryCreateFullEntry(e.value);
-        }
-    }
-    return undefined;
-}
-
 function editLastEntry(templateInstance: KeyValueInputTemplate): string {
     if (templateInstance.data.kind !== "single") { // cannot edit partial entry of single mode input
         const partialEntry = templateInstance.partialEntry.get();
@@ -416,18 +390,17 @@ function removeAllEntries(templateInstance: KeyValueInputTemplate) {
     emitChange(templateInstance);
 }
 
-export interface KeyValueEntriesChangedEvent extends CustomEvent {
-    detail: Array<KeyValueEntry<any>>;
-}
-
 function emitChange(templateInstance: KeyValueInputTemplate) {
     Tracker.flush();
     if (templateInstance.element) {
-        Tracker.afterFlush(() => window.setTimeout(() =>
-            templateInstance.element.dispatchEvent(
-                new CustomEvent("keyValueEntriesChanged", { detail: templateInstance.entries.get() }),
-            )
-        , 100)); // make sure keyValueInput stays responsive; apply changes a little later
+        const event: KeyValueEntriesChangedEvent = new CustomEvent(
+            "keyValueEntriesChanged",
+            { detail: templateInstance.entries.get() },
+        );
+        Tracker.afterFlush(() => window.setTimeout(
+            () => templateInstance.element.dispatchEvent(event),
+            100,
+        )); // make sure keyValueInput stays responsive; apply changes a little later
     }
 }
 

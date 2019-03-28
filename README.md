@@ -13,15 +13,16 @@ In single input mode, there is only one possible key and the user just keeps on 
 
 Install the package by running `meteor npm install --save meteor-bootstrap_key-value-tag-input`.
 
-In your script, import the css and html files for the component:
+Both on client and server, import all your needed Classes and Types from the npm package `meteor-bootstrap_key-value-tag-input`.
+In your client-side script, you also need to import the component files once:
 
 ```javascript
-import "meteor-bootstrap_key-value-tag-input/src/keyValueInput/keyValueInput.css";
-import "meteor-bootstrap_key-value-tag-input/src/keyValueInput/keyValueInput.html";
+import "meteor-bootstrap_key-value-tag-input/dist/keyValueInput.html";
+import "meteor-bootstrap_key-value-tag-input/dist/keyValueInput.css";
+import "meteor-bootstrap_key-value-tag-input/dist/keyValueInput.js";
 ```
 
-Afterwards, import all your needed Classes and Types from the npm package `meteor-bootstrap_key-value-tag-input`.
-Setup your types and the corresponding helpers and react to input changes in your event handling, e.g.:
+For your template, setup your types and the corresponding helpers and react to input changes in your event handling, e.g.:
 
 ```javascript
 import { BooleanKeyValueType, NumberKeyValueType } from "meteor-bootstrap_key-value-tag-input";
@@ -85,7 +86,7 @@ Each input type corresponds to an id (usually a key of the mongo object you want
 Whenever the user changes the input, the form field fires a `keyValueEntriesChanged` event, which has an array of [`KeyValueEntry`](./src/keyValueTypes/KeyValueType.ts) as `detail` property.
 Each entry consists of a reference to its `KeyValueType` (`type`) and the input `value`.
 
-In order to clear an input, you can invoke `KeyValueTagInput.clearEntries(...)` on the `HTMLElement` of the input.
+In order to clear an input, you can invoke `clearEntries(...)` on the `HTMLElement` of the input.
 
 You can easily create your own input types by creating new subclasses of `KeyValueType`.
 

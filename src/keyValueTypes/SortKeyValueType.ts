@@ -1,4 +1,5 @@
-import { KeyValueHtmlDisplay, KeyValueSuggestion, KeyValueType } from "./KeyValueType";
+import { KeyValueHtmlDisplay, KeyValueSuggestion } from "./KeyValueDatatypes";
+import { KeyValueType } from "./KeyValueType";
 
 export const ascendingValues = [ "aufsteigend", "auf", "asc", "ascending", "up", "1", "+" ];
 export const descendingValues = [ "absteigend", "ab", "desc", "descending", "down", "-1", "-" ];
