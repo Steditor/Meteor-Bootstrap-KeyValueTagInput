@@ -3,13 +3,12 @@ import { ReactiveVar } from "meteor/reactive-var";
 import { Template } from "meteor/templating";
 import { Tracker } from "meteor/tracker";
 import { escapeRegexChars } from "../helpers/strings";
-import {
-    createEntriesFromTypes,
-    KeyValueEntry,
-    KeyValueEntryConstructionData,
-    KeyValueSuggestion,
-    KeyValueType,
-} from "../keyValueTypes";
+
+import { KeyValueSuggestion } from "../keyValueTypes/KeyValueDatatypes";
+import { KeyValueEntry } from "../keyValueTypes/KeyValueEntry";
+import { KeyValueType } from "../keyValueTypes/KeyValueType";
+
+import { createEntriesFromTypes, KeyValueEntryConstructionData } from "../keyValueTypes/constructionHelpers";
 import {
     KeyValueEntriesChangedEvent,
     KeyValueInputMultipleTypesData,
