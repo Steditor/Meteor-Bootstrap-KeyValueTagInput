@@ -105,7 +105,8 @@ Template.keyValueInput.events({
                 buildSuggestions(templateInstance);
             }
         } else if (key === "Enter" || key === "Tab") {
-            if (templateInstance.textInput.val() !== "" || templateInstance.partialEntry.get()) {
+            if (templateInstance.textInput.val() !== "" ||
+                (templateInstance.partialEntry.get() && templateInstance.data.kind !== "single")) {
                 event.preventDefault();
                 if (completeEntry(templateInstance.textInput.val() as string, templateInstance)) {
                     templateInstance.textInput.val("");
