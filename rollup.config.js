@@ -1,6 +1,6 @@
 import externalGlobals from "rollup-plugin-external-globals";
 import resolve from "rollup-plugin-node-resolve";
-import copy from "rollup-copy-plugin";
+import copy from "rollup-plugin-copy"
 
 module.exports = [
     {
@@ -35,8 +35,8 @@ module.exports = [
         plugins: [
             resolve(),
             copy({
-                "src/keyValueInput/keyValueInput.html": "dist/keyValueInput.html",
-                "src/keyValueInput/keyValueInput.css": "dist/keyValueInput.css",
+                targets: [ "src/keyValueInput/keyValueInput.html", "src/keyValueInput/keyValueInput.css" ],
+                outputFolder: "dist",
             }),
         ]
     }
