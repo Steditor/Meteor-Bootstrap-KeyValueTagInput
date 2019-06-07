@@ -49,7 +49,8 @@ Template.keyValueInput.onCreated(function(this: KeyValueInputTemplate) {
         data.kind = data.kind || "multiple";
     });
 
-    this.entries = new ReactiveVar(createEntries(this.data.entries, this));
+    this.entries = new ReactiveVar([]);
+    this.autorun(() => createInitialEntries(this));
     this.partialEntry = new ReactiveVar(null);
     resetPartialEntry(this);
     this.defaultEntries = new ReactiveVar([]);
@@ -337,6 +338,10 @@ function completeEntry(val: string, templateInstance: KeyValueInputTemplate) {
     templateInstance.entries.dep.changed();
     emitChange(templateInstance);
     return true;
+}
+
+function createInitialEntries(templateInstance: KeyValueInputTemplate) {
+    templateInstance.entries.set(createEntries(KeyValueInputTemplateData().entries, templateInstance));
 }
 
 function createDefaultEntries(templateInstance: KeyValueInputTemplate) {
