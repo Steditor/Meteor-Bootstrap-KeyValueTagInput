@@ -5,6 +5,7 @@
         "target": "es5",
         "lib": [ "es2017", "dom" ],
         "moduleResolution": "node",
+        "esModuleInterop": true,
         "alwaysStrict": true,
         "allowJs": false,
         "noImplicitAny": true,

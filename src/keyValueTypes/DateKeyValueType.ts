@@ -1,8 +1,7 @@
 import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 
-import * as moment_ from "moment";
-const moment = moment_;
+import moment from "moment";
 
 type Operator = "<" | ">" | "<=" | ">=" | "!=" | "=";
 type OpSymbol = "<" | ">" | "≤" | "≥" | "≠" | "=";
