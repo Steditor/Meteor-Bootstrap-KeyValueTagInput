@@ -1,13 +1,13 @@
 <template name="keyValueInput">
     <div class="form-control key-value-input value-kind-{{valueKind}} {{class}}">
         {{#each entry in defaultEntries}}
-            {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry default=true}}
+            {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry default=true classes=entryClasses}}
         {{/each}}
         {{#each entry in entries}}
-            {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry}}
+            {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry classes=entryClasses}}
         {{/each}}
         {{#if and (not isSingle) partialEntry}}
-            {{> keyValueInputEntry isSingle=isSingle entry=partialEntry}}
+            {{> keyValueInputEntry isSingle=isSingle entry=partialEntry classes=entryClasses}}
         {{/if}}
         <div class="key-value-text-input-container">
             <input class="key-value-text-input" type="text" placeholder="{{#unless partialEntry}}{{availableTypes}}{{/unless}}">
@@ -32,10 +32,10 @@
 
 <template name="keyValueInputEntry">
     <div class="key-value-entry {{#if entry.isPartial}}partial{{/if}} {{#if entry.isDefault}}default{{/if}}" tabindex="{{#unless entry.isDefault}}0{{/unless}}">
-        {{#unless isSingle}}<span class="badge badge-light">{{entry.label}}</span>{{/unless}}
+        {{#unless isSingle}}<span class="badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>{{/unless}}
         {{#unless entry.isPartial}}
             {{#let display=entry.display}}
-                <span class="badge badge-dark">{{display.text}}{{{display.html}}}{{#unless default}} <i class="fa fa-times"></i>{{/unless}}</span>
+                <span class="badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}{{#unless default}} <i class="fa fa-times"></i>{{/unless}}</span>
             {{/let}}
         {{/unless}}
     </div>
@@ -43,9 +43,9 @@
 
 <template name="keyValueInputEntryDisplay">
     <div class="key-value-entry">
-        <span class="badge badge-light">{{entry.label}}</span>
+        <span class="badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>
         {{#let display=entry.display}}
-            <span class="badge badge-dark">{{display.text}}{{{display.html}}}</span>
+            <span class="badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}</span>
         {{/let}}
     </div>
 </template>

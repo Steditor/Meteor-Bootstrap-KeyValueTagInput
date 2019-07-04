@@ -12,6 +12,11 @@ interface KeyValueInputSingleTypeData {
 }
 
 export type KeyValueInputTemplateData = (KeyValueInputMultipleTypesData | KeyValueInputSingleTypeData) & {
+    class?: string;
+    entryClasses?: {
+        key?: string;
+        value?: string;
+    };
     defaultEntries?: KeyValueEntryConstructionData[];
     entries?: KeyValueEntryConstructionData[];
     valueKind?: "single" | "multiple";
