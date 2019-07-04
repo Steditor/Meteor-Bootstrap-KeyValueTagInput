@@ -47,6 +47,7 @@ Template.keyValueInput.onCreated(function(this: KeyValueInputTemplate) {
     this.autorun(() => {
         const data = KeyValueInputTemplateData();
         data.kind = data.kind || "multiple";
+        data.valueKind = data.valueKind || "multiple";
     });
 
     this.entries = new ReactiveVar([]);
@@ -92,12 +93,21 @@ Template.keyValueInput.events({
     },
 
     "input .key-value-input, focus .key-value-input"(event: Event, templateInstance: KeyValueInputTemplate) {
+        if (templateInstance.data.valueKind === "single" && templateInstance.entries.get().length > 0) {
+            templateInstance.textInput.val("");
+        }
         buildSuggestions(templateInstance);
     },
 
     "keydown .key-value-text-input"(event: KeyboardEvent, templateInstance: KeyValueInputTemplate) {
         const key = event.key;
         const target = event.target as HTMLInputElement;
+
+        if (templateInstance.data.valueKind === "single" && templateInstance.entries.get().length > 0
+            && key !== "Backspace" && key !== "Tab") {
+            event.preventDefault();
+            return;
+        }
 
         if (key === ":") {
             if (addPartialEntry(templateInstance.textInput.val() as string, templateInstance)) {
@@ -108,7 +118,9 @@ Template.keyValueInput.events({
         } else if (key === "Enter" || key === "Tab") {
             if (templateInstance.textInput.val() !== "" ||
                 (templateInstance.partialEntry.get() && templateInstance.data.kind !== "single")) {
-                event.preventDefault();
+                if (key === "Enter" || templateInstance.data.valueKind !== "single") {
+                    event.preventDefault();
+                }
                 if (completeEntry(templateInstance.textInput.val() as string, templateInstance)) {
                     templateInstance.textInput.val("");
                     buildSuggestions(templateInstance);
@@ -128,7 +140,7 @@ Template.keyValueInput.events({
         const key = event.key;
         const target = event.target as HTMLInputElement;
 
-        if (key === " ") {
+        if (key === " " && templateInstance.data.valueKind !== "single") {
             const inputValue = templateInstance.textInput.val() as string;
             const cursorPos = target.selectionStart!;
             const value = inputValue.trim();
@@ -173,7 +185,7 @@ Template.keyValueInput.events({
             moveFocus(event, templateInstance, key as ("ArrowUp" | "ArrowDown" | "Home" | "End"));
         } else if ([ "Enter", ":", " " ].includes(key)) {
             event.preventDefault();
-            templateInstance.$(target).click();
+            templateInstance.$(target).trigger("click");
         } else if (key.length === 1 || [ "Backspace", "Delete", "ArrowLeft", "ArrowRight" ].includes(key)) {
             moveFocus(event, templateInstance, "text-input");
         }
@@ -278,7 +290,8 @@ function resetPartialEntry(templateInstance: KeyValueInputTemplate) {
 }
 
 function addPartialEntry(val: string, templateInstance: KeyValueInputTemplate) {
-    if (templateInstance.partialEntry.get() || templateInstance.data.kind === "single") {
+    if (templateInstance.partialEntry.get() || templateInstance.data.kind === "single"
+    || (templateInstance.entries.get().length > 0 && templateInstance.data.valueKind === "single")) {
         return false;
     }
 
@@ -303,6 +316,9 @@ function getFallbackType(templateInstance: KeyValueInputTemplate): KeyValueType<
 }
 
 function completeEntry(val: string, templateInstance: KeyValueInputTemplate) {
+    if (templateInstance.entries.get().length > 0 && templateInstance.data.valueKind === "single") {
+        return false;
+    }
     const partialEntry = templateInstance.partialEntry.get();
     const fallbackType = getFallbackType(templateInstance);
 
@@ -341,12 +357,20 @@ function completeEntry(val: string, templateInstance: KeyValueInputTemplate) {
 }
 
 function createInitialEntries(templateInstance: KeyValueInputTemplate) {
-    templateInstance.entries.set(createEntries(KeyValueInputTemplateData().entries, templateInstance));
+    const data = KeyValueInputTemplateData();
+    if (data.entries && data.entries.length > 1 && data.valueKind === "single") {
+        throw new Error("Cannot create more than one entry for input with valueKind=single.");
+    }
+    templateInstance.entries.set(createEntries(data.entries, templateInstance));
 }
 
 function createDefaultEntries(templateInstance: KeyValueInputTemplate) {
+    const data = KeyValueInputTemplateData();
+    if (data.defaultEntries && data.defaultEntries.length > 0 && data.valueKind === "single") {
+        throw new Error("Cannot create default entries for input with valueKind=single.");
+    }
     templateInstance.defaultEntries.set(
-        createEntries(KeyValueInputTemplateData().defaultEntries, templateInstance)
+        createEntries(data.defaultEntries, templateInstance)
         .map((entry) => { entry.isDefault = true; return entry; }),
     );
 }
@@ -410,6 +434,11 @@ function emitChange(templateInstance: KeyValueInputTemplate) {
 }
 
 function buildSuggestions(templateInstance: KeyValueInputTemplate) {
+    if (templateInstance.entries.get().length > 0 && templateInstance.data.valueKind === "single") {
+        templateInstance.suggestions.set([]);
+        return;
+    }
+
     const partialEntry = templateInstance.partialEntry.get();
     const inputValue = templateInstance.textInput ? (templateInstance.textInput.val() as string).trim() : "";
     let suggestions: KeyValueSuggestions = null;

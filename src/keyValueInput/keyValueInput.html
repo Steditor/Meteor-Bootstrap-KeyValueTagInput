@@ -1,5 +1,5 @@
 <template name="keyValueInput">
-    <div class="form-control key-value-input {{class}}">
+    <div class="form-control key-value-input value-kind-{{valueKind}} {{class}}">
         {{#each entry in defaultEntries}}
             {{> keyValueInputEntry isSingle=isSingle index=@index entry=entry default=true}}
         {{/each}}
@@ -31,7 +31,7 @@
 </template>
 
 <template name="keyValueInputEntry">
-    <div class="key-value-entry {{#if entry.isPartial}}partial{{/if}} {{#if entry.isDefault}}default{{/if}}"  tabindex="{{#unless entry.isDefault}}0{{/unless}}">
+    <div class="key-value-entry {{#if entry.isPartial}}partial{{/if}} {{#if entry.isDefault}}default{{/if}}" tabindex="{{#unless entry.isDefault}}0{{/unless}}">
         {{#unless isSingle}}<span class="badge badge-light">{{entry.label}}</span>{{/unless}}
         {{#unless entry.isPartial}}
             {{#let display=entry.display}}
@@ -51,7 +51,7 @@
 </template>
 
 <template name="keyValueSuggestion">
-    <a href="#" class="list-group-item list-group-item-action key-value-suggestion {{#if suggestion.fallback}}key-value-fallback-suggestion{{/if}}">
+    <a href="#" class="list-group-item list-group-item-action key-value-suggestion {{#if suggestion.fallback}}key-value-fallback-suggestion{{/if}}" tabindex="-1">
         <div class="d-flex w-100 justify-content-between">
             <h6>{{suggestion.display.text}}{{{suggestion.display.html}}}</h6>
             <small>

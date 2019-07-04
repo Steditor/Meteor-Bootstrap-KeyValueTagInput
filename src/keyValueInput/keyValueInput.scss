@@ -111,6 +111,24 @@
       display: block;
     }
   }
+  &.value-kind-single {
+    .key-value-entry {
+      flex-grow: 1;
+      .badge {
+        width: 100%;
+      }
+      .fa-times {
+        display: none;
+      }
+    }
+    .key-value-entry + .key-value-text-input-container {
+      flex-grow: 0;
+      input {
+        width: 1ex;
+        min-width: 1ex;
+      }
+    }
+  }
 }
 
 div.key-value-entry {
