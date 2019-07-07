@@ -1,3 +1,4 @@
+import { KeyValueEntryConstructionData } from "./constructionHelpers";
 import { KeyValueDisplay, KeyValueSuggestion } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 
@@ -61,6 +62,13 @@ export class KeyValueEntry<T> {
             return undefined;
         }
         return this._type.editText(this.value);
+    }
+
+    get constructionData(): KeyValueEntryConstructionData {
+        return {
+            key: this.label,
+            value: this.editText,
+        };
     }
 
     public equals(entry: KeyValueEntry<any>): boolean {
