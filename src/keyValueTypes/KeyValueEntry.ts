@@ -66,7 +66,7 @@ export class KeyValueEntry<T> {
 
     get constructionData(): KeyValueEntryConstructionData {
         return {
-            key: this.label,
+            key: this.id,
             value: this.editText,
         };
     }
