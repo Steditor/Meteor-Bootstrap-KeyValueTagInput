@@ -1,4 +1,5 @@
 import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
+import { KeyValueEntry } from "./KeyValueEntry";
 import { KeyValueType } from "./KeyValueType";
 
 export default class TagKeyValueType extends KeyValueType<string> {
@@ -14,10 +15,17 @@ export default class TagKeyValueType extends KeyValueType<string> {
         this._allowOther = allowOther;
     }
 
-    public getSuggestions(prefix: string): KeyValueSuggestion[] {
+    public getSuggestions(prefix: string, entries: Array<KeyValueEntry<any>>, defaultEntries: Array<KeyValueEntry<any>>,
+                          allowDuplicates: boolean): KeyValueSuggestion[] {
         const substringLower = prefix.toLowerCase();
-        return this._tags.filter((t) => t.toLowerCase().includes(substringLower))
-            .map((t) => ({
+        let tags = this._tags.filter((t) => t.toLowerCase().includes(substringLower))
+        if (!allowDuplicates) {
+            tags = tags.filter((t) =>
+                entries.every((e) => e.value !== t) &&
+                defaultEntries.every((e) => e.value !== t),
+            );
+        }
+        return tags.map((t) => ({
                 display: { text: t },
                 match: prefix !== "" ? t : undefined,
                 value: t,

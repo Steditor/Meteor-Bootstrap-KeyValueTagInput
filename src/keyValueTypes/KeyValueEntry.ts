@@ -24,8 +24,9 @@ export class KeyValueEntry<T> {
         return this._type.label;
     }
 
-    public getSuggestions(prefix: string): KeyValueSuggestion[] {
-        return this._type.getSuggestions(prefix);
+    public getSuggestions(prefix: string, entries: Array<KeyValueEntry<any>>, defaultEntries: Array<KeyValueEntry<any>>,
+                          allowDuplicates: boolean): KeyValueSuggestion[] {
+        return this._type.getSuggestions(prefix, entries, defaultEntries, allowDuplicates);
     }
 
     public parse(val: T | string): T | undefined {

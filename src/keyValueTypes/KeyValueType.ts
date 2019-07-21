@@ -50,7 +50,9 @@ export abstract class KeyValueType<T> {
         }
     }
 
-    public abstract getSuggestions(prefix: string): KeyValueSuggestion[];
+    public abstract getSuggestions(prefix: string,
+                                   entries: Array<KeyValueEntry<any>>, defaultEntries: Array<KeyValueEntry<any>>,
+                                   allowDuplicates: boolean): KeyValueSuggestion[];
 
     public abstract parseString(val: string): T | undefined;
 

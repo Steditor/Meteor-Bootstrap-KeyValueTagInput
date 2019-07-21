@@ -346,7 +346,7 @@ function completeEntry(val: string, templateInstance: KeyValueInputTemplate) {
     }
 
     const entries = templateInstance.entries.get();
-    if (entries.some((e) => e.equals(newEntry!))) {
+    if (!templateInstance.data.allowDuplicates && entries.some((e) => e.equals(newEntry!))) {
         return true;
     }
     entries.push(newEntry);
@@ -434,7 +434,8 @@ function emitChange(templateInstance: KeyValueInputTemplate) {
 }
 
 function buildSuggestions(templateInstance: KeyValueInputTemplate) {
-    if (templateInstance.entries.get().length > 0 && templateInstance.data.valueKind === "single") {
+    const entries = templateInstance.entries.get();
+    if (entries.length > 0 && templateInstance.data.valueKind === "single") {
         templateInstance.suggestions.set([]);
         return;
     }
@@ -444,7 +445,8 @@ function buildSuggestions(templateInstance: KeyValueInputTemplate) {
     let suggestions: KeyValueSuggestions = null;
 
     if (partialEntry) {
-        const entrySuggestions = partialEntry.getSuggestions(inputValue);
+        const entrySuggestions = partialEntry.getSuggestions(inputValue,
+            entries, templateInstance.defaultEntries.get(), !!templateInstance.data.allowDuplicates);
         const parsed = partialEntry.parse(inputValue);
         if (parsed !== undefined) {
             entrySuggestions.push({

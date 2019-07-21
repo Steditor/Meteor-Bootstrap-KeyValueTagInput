@@ -20,6 +20,7 @@ export type KeyValueInputTemplateData = (KeyValueInputMultipleTypesData | KeyVal
     defaultEntries?: KeyValueEntryConstructionData[];
     entries?: KeyValueEntryConstructionData[];
     valueKind?: "single" | "multiple";
+    allowDuplicates?: boolean;
 };
 
 export interface KeyValueEntriesChangedEvent extends CustomEvent {
