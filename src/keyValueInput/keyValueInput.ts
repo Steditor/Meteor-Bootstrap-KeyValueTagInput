@@ -407,7 +407,7 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
 }
 
 function removeEntry(entry: KeyValueEntry<any>, templateInstance: KeyValueInputTemplate) {
-    const filtered = templateInstance.entries.get().filter((e) => !e.equals(entry));
+    const filtered = templateInstance.entries.get().filter((e) => e !== entry);
     templateInstance.entries.set(filtered);
     emitChange(templateInstance);
 }

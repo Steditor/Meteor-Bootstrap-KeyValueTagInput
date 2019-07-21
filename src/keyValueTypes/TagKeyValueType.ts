@@ -18,7 +18,7 @@ export default class TagKeyValueType extends KeyValueType<string> {
     public getSuggestions(prefix: string, entries: Array<KeyValueEntry<any>>, defaultEntries: Array<KeyValueEntry<any>>,
                           allowDuplicates: boolean): KeyValueSuggestion[] {
         const substringLower = prefix.toLowerCase();
-        let tags = this._tags.filter((t) => t.toLowerCase().includes(substringLower))
+        let tags = this._tags.filter((t) => t.toLowerCase().includes(substringLower));
         if (!allowDuplicates) {
             tags = tags.filter((t) =>
                 entries.every((e) => e.value !== t) &&
