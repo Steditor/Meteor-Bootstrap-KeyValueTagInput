@@ -35,8 +35,13 @@ module.exports = [
         plugins: [
             resolve(),
             copy({
-                targets: [ "src/keyValueInput/keyValueInput.html", "src/keyValueInput/keyValueInput.css" ],
-                outputFolder: "dist",
+                targets: [{
+                    src: "src/keyValueInput/keyValueInput.html",
+                    dest: "dist",
+                }, {
+                    src: "src/keyValueInput/keyValueInput.css",
+                    dest: "dist",
+                } ],
             }),
         ]
     }
