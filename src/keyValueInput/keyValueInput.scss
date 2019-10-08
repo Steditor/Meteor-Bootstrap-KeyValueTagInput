@@ -112,20 +112,23 @@
     }
   }
   &.value-kind-single {
-    .key-value-entry {
+    .key-value-entry:not(.partial) {
       flex-grow: 1;
-      .badge {
+      .badge.entry-value {
         width: 100%;
       }
       .fa-times {
         display: none;
       }
     }
-    .key-value-entry + .key-value-text-input-container {
+    .key-value-entry:not(.partial) + .key-value-text-input-container {
       flex-grow: 0;
       input {
         width: 1ex;
         min-width: 1ex;
+        &::placeholder {
+          color: transparent;
+        }
       }
     }
   }

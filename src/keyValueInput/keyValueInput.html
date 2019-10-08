@@ -32,10 +32,10 @@
 
 <template name="keyValueInputEntry">
     <div class="key-value-entry {{#if entry.isPartial}}partial{{/if}} {{#if entry.isDefault}}default{{/if}}" tabindex="{{#unless entry.isDefault}}0{{/unless}}">
-        {{#unless isSingle}}<span class="badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>{{/unless}}
+        {{#unless isSingle}}<span class="entry-key badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>{{/unless}}
         {{#unless entry.isPartial}}
             {{#let display=entry.display}}
-                <span class="badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}{{#unless default}} <i class="fa fa-times"></i>{{/unless}}</span>
+                <span class="entry-value badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}{{#unless default}} <i class="fa fa-times"></i>{{/unless}}</span>
             {{/let}}
         {{/unless}}
     </div>
@@ -43,9 +43,9 @@
 
 <template name="keyValueInputEntryDisplay">
     <div class="key-value-entry">
-        <span class="badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>
+        <span class="entry-key badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>
         {{#let display=entry.display}}
-            <span class="badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}</span>
+            <span class="entry-value badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}</span>
         {{/let}}
     </div>
 </template>

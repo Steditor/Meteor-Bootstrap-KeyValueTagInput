@@ -61,9 +61,13 @@ If the input should forward all string input not matching a key to a dedicated K
 {{>keyValueInput types=filterTypes fallbackType=2 class="filterInput" }}
 ```
 
-### Single mode
+### Single key mode
 
 In order to just collect values for a single key, pass `kind="single"` to the input and pass a single KeyValueType to `type` (instead of an array to `types`).
+
+### Single value mode
+
+Pass `valueKind="single"` to the input to allow only a single entry.
 
 ### Default entries
 
