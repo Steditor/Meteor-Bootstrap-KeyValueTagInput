@@ -1,3 +1,4 @@
+import { MathOperator, mathOperators, mathOpsAndSymbols, MathOpSymbol, mathOpToSymbol } from "../helpers/operators";
 import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 
@@ -7,30 +8,12 @@ import { NumberDelimiters } from "../helpers/formatting";
 import { escapeRegexChars } from "../helpers/strings";
 import NumberFormat = Intl.NumberFormat;
 
-type Operator = "=" | "*" | "/" | "+" | "-";
-type OpSymbol = "=" | "*" | "÷" | "+" | "-";
-
-const symbolForOperator: { [K in Operator]: OpSymbol } = {
-    "=": "=",
-    "*": "*",
-    "/": "÷",
-    "+": "+",
-    "-": "-",
-};
-
-const operatorsAndSymbols: Array<OpSymbol | Operator> = [ "=", "*", "/", "+", "-", "÷" ];
-
-function toSymbol(op: OpSymbol | Operator): OpSymbol {
-    // @ts-ignore missing index signature of mapped type
-    return symbolForOperator[op] || op;
-}
-
 interface SlackNumberModifierKeyValue {
-    operator: OpSymbol | Operator;
+    operator: MathOpSymbol | MathOperator;
     number: number;
 }
 interface NumberModifierKeyValue extends SlackNumberModifierKeyValue {
-    operator: Operator;
+    operator: MathOperator;
 }
 
 export type RoundMode = "not" | "up" | "down" | "math";
@@ -97,10 +80,10 @@ export default class NumberModifierKeyValueType extends KeyValueType<NumberModif
         // empty input or invalid input or fallback "="
         if (prefix === "" || !parsed || (parsed.operator === "=" && !prefix.startsWith("="))) {
             let number = 42;
-            let operators = Object.keys(symbolForOperator) as Array<OpSymbol | Operator>;
+            let operators = Object.keys(mathOperators) as Array<MathOpSymbol | MathOperator>;
             if (prefix !== "") {
                 number = parsed ? parsed.number : number;
-                const filteredOperators = operatorsAndSymbols.filter((op) => op.startsWith(prefix));
+                const filteredOperators = mathOpsAndSymbols.filter((op) => op.startsWith(prefix));
                 operators = filteredOperators.length > 0 ? filteredOperators : operators;
             }
 
@@ -126,7 +109,7 @@ export default class NumberModifierKeyValueType extends KeyValueType<NumberModif
 
         if (match) {
             return {
-                operator: match[1] as Operator || "=",
+                operator: match[1] as MathOperator || "=",
                 number: Number(match[2]),
             };
         } else {
@@ -135,7 +118,7 @@ export default class NumberModifierKeyValueType extends KeyValueType<NumberModif
     }
 
     public checkValue(val: any): NumberModifierKeyValue | undefined {
-        if (Object.keys(symbolForOperator).includes(val.operator) && typeof val.number === "number") {
+        if (Object.keys(mathOperators).includes(val.operator) && typeof val.number === "number") {
             return val;
         } else {
             return undefined;
@@ -144,7 +127,7 @@ export default class NumberModifierKeyValueType extends KeyValueType<NumberModif
 
     public display(value: SlackNumberModifierKeyValue): KeyValueTextDisplay {
         const numberString = this._numberFormatter ? this._numberFormatter.format(value.number) : String(value.number);
-        return { text: toSymbol(value.operator) + " " + numberString };
+        return { text: mathOpToSymbol(value.operator) + " " + numberString };
     }
 
     public editText(value: SlackNumberModifierKeyValue): string {

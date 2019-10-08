@@ -1,53 +1,28 @@
 import { NumberDelimiters } from "../helpers/formatting";
+import {
+    CompOperator,
+    compOperators,
+    compOpsAndSymbols,
+    CompOpSymbol,
+    compOpToSelector,
+    compOpToSymbol,
+} from "../helpers/operators";
 import { escapeRegexChars } from "../helpers/strings";
 import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 import NumberFormat = Intl.NumberFormat;
 
-type Operator = "<" | ">" | "<=" | ">=" | "!=" | "=";
-type OpSymbol = "<" | ">" | "≤" | "≥" | "≠" | "=";
-
-const symbolForOperator: { [K in Operator]: OpSymbol } = {
-    "<": "<",
-    ">": ">",
-    "<=": "≤",
-    ">=": "≥",
-    "!=": "≠",
-    "=": "=",
-};
-
-const operatorsAndSymbols: Array<OpSymbol | Operator> = [ "<", ">", "<=", ">=", "!=", "=", "≤", "≥", "≠" ];
-
-function toSymbol(op: OpSymbol | Operator): OpSymbol {
-    // @ts-ignore missing index signature of mapped type
-    return symbolForOperator[op] || op;
-}
-
-type OpSelector = "$lt" | "$gt" | "$lte" | "$gte" | "$ne" | "$eq";
-const selectorForOperator: { [K in Operator]: OpSelector } = {
-    "<": "$lt",
-    ">": "$gt",
-    "<=": "$lte",
-    ">=": "$gte",
-    "!=": "$ne",
-    "=": "$eq",
-};
-function toSelector(op: Operator): OpSelector {
-    // @ts-ignore missing index signature of mapped type
-    return selectorForOperator[op];
-}
-
 interface SlackNumberKeyValue {
-    operator: OpSymbol | Operator;
+    operator: CompOpSymbol | CompOperator;
     number: number;
 }
 interface NumberKeyValue extends SlackNumberKeyValue {
-    operator: Operator;
+    operator: CompOperator;
 }
 
 export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
     public static mongoSelectorFor(value: NumberKeyValue, numberTransform: (n: number) => number = (n) => n) {
-        return { [toSelector(value.operator)]: numberTransform(value.number) };
+        return { [compOpToSelector(value.operator)]: numberTransform(value.number) };
     }
 
     private _delimiters: NumberDelimiters = {
@@ -70,10 +45,10 @@ export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
         // empty input or invalid input or fallback "="
         if (prefix === "" || !parsed || (parsed.operator === "=" && !prefix.startsWith("="))) {
             let number = 42;
-            let operators = Object.keys(symbolForOperator) as Array<OpSymbol | Operator>;
+            let operators = Object.keys(compOperators) as Array<CompOpSymbol | CompOperator>;
             if (prefix !== "") {
                 number = parsed ? parsed.number : number;
-                const filteredOperators = operatorsAndSymbols.filter((op) => op.startsWith(prefix));
+                const filteredOperators = compOpsAndSymbols.filter((op) => op.startsWith(prefix));
                 operators = filteredOperators.length > 0 ? filteredOperators : operators;
             }
 
@@ -103,7 +78,7 @@ export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
 
         if (match) {
             return {
-                operator: match[1] as Operator || "=",
+                operator: match[1] as CompOperator || "=",
                 number: Number(match[2]),
             };
         } else {
@@ -112,7 +87,7 @@ export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
     }
 
     public checkValue(val: any): NumberKeyValue | undefined {
-        if (Object.keys(symbolForOperator).includes(val.operator) && typeof val.number === "number") {
+        if (Object.keys(compOperators).includes(val.operator) && typeof val.number === "number") {
             return val;
         } else {
             return undefined;
@@ -121,7 +96,7 @@ export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
 
     public display(value: SlackNumberKeyValue): KeyValueTextDisplay {
         const numberString = this._numberFormatter ? this._numberFormatter.format(value.number) : String(value.number);
-        return { text: toSymbol(value.operator) + " " + numberString };
+        return { text: compOpToSymbol(value.operator) + " " + numberString };
     }
 
     public editText(value: SlackNumberKeyValue): string {

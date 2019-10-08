@@ -1,52 +1,26 @@
+import {
+    CompOperator,
+    compOperators,
+    compOpsAndSymbols,
+    CompOpSymbol,
+    compOpToSelector, compOpToSymbol,
+} from "../helpers/operators";
 import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 
 import moment from "moment";
 
-type Operator = "<" | ">" | "<=" | ">=" | "!=" | "=";
-type OpSymbol = "<" | ">" | "≤" | "≥" | "≠" | "=";
-
-const symbolForOperator: { [K in Operator]: OpSymbol } = {
-    "<": "<",
-    ">": ">",
-    "<=": "≤",
-    ">=": "≥",
-    "!=": "≠",
-    "=": "=",
-};
-
-const operatorsAndSymbols: Array<OpSymbol | Operator> = [ "<", ">", "<=", ">=", "!=", "=", "≤", "≥", "≠" ];
-
-function toSymbol(op: OpSymbol | Operator): OpSymbol {
-    // @ts-ignore missing index signature of mapped type
-    return symbolForOperator[op] || op;
-}
-
-type OpSelector = "$lt" | "$gt" | "$lte" | "$gte" | "$ne" | "$eq";
-const selectorForOperator: { [K in Operator]: OpSelector } = {
-    "<": "$lt",
-    ">": "$gt",
-    "<=": "$lte",
-    ">=": "$gte",
-    "!=": "$ne",
-    "=": "$eq",
-};
-function toSelector(op: Operator): OpSelector {
-    // @ts-ignore missing index signature of mapped type
-    return selectorForOperator[op];
-}
-
 interface SlackDateKeyValue {
-    operator: OpSymbol | Operator;
+    operator: CompOpSymbol | CompOperator;
     date: Date;
 }
 interface DateKeyValue extends SlackDateKeyValue {
-    operator: Operator;
+    operator: CompOperator;
 }
 
 export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
     public static mongoSelectorFor(value: DateKeyValue) {
-        return { [toSelector(value.operator)]: value.date };
+        return { [compOpToSelector(value.operator)]: value.date };
     }
 
     private _dateFormat: string = "YYYY-MM-DD";
@@ -64,10 +38,10 @@ export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
         // empty input or invalid input or fallback "="
         if (prefix === "" || !parsed || (parsed.operator === "=" && !prefix.startsWith("="))) {
             let date = new Date();
-            let operators = Object.keys(symbolForOperator) as Array<OpSymbol | Operator>;
+            let operators = Object.keys(compOperators) as Array<CompOpSymbol | CompOperator>;
             if (prefix !== "") {
                 date = parsed ? parsed.date : date;
-                const filteredOperators = operatorsAndSymbols.filter((op) => op.startsWith(prefix));
+                const filteredOperators = compOpsAndSymbols.filter((op) => op.startsWith(prefix));
                 operators = filteredOperators.length > 0 ? filteredOperators : operators;
             }
 
@@ -97,7 +71,7 @@ export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
             const parsedDate = moment.utc(match[2], this._dateParseFormats, true);
             if (parsedDate.isValid()) {
                 return {
-                    operator: match[1] as Operator || "=",
+                    operator: match[1] as CompOperator || "=",
                     date: parsedDate.toDate(),
                 };
             } else {
@@ -109,7 +83,7 @@ export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
     }
 
     public checkValue(val: any): DateKeyValue | undefined {
-        if (Object.keys(symbolForOperator).includes(val.operator) && val.date instanceof Date && !isNaN(val.date)) {
+        if (Object.keys(compOperators).includes(val.operator) && val.date instanceof Date && !isNaN(val.date)) {
             return val;
         } else {
             return undefined;
@@ -117,7 +91,7 @@ export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
     }
 
     public display(value: SlackDateKeyValue): KeyValueTextDisplay {
-        return { text: toSymbol(value.operator) + " " + moment(value.date).format(this._dateFormat) };
+        return { text: compOpToSymbol(value.operator) + " " + moment(value.date).format(this._dateFormat) };
     }
 
     public editText(value: SlackDateKeyValue): string {
