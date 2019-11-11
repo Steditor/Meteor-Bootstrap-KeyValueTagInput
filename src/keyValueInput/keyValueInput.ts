@@ -46,8 +46,8 @@ function KeyValueInputTemplate(): KeyValueInputTemplate {
 Template.keyValueInput.onCreated(function(this: KeyValueInputTemplate) {
     this.autorun(() => {
         const data = KeyValueInputTemplateData();
-        data.kind = data.kind || "multiple";
-        data.valueKind = data.valueKind || "multiple";
+        data.kind = data.kind ?? "multiple";
+        data.valueKind = data.valueKind ?? "multiple";
     });
 
     this.entries = new ReactiveVar([]);
@@ -155,7 +155,7 @@ Template.keyValueInput.events({
             } else if (!value.startsWith("\"")) {
                 // shift cursor due to trimmed whitespace and escaped characters in front of the cursor position
                 const shiftCursor = inputValue.length - inputValue.trimLeft().length + 1
-                    + (inputValue.substring(0, cursorPos).match(/["\\]/g) || []).length;
+                    + (inputValue.substring(0, cursorPos).match(/["\\]/g)?.length ?? 0);
                 // escape \ and "
                 templateInstance.textInput.val(`"${value.replace(/\\/g, "\\\\").replace(/"/g, "\\\"")}"`);
                 target.setSelectionRange(cursorPos + shiftCursor, cursorPos + shiftCursor);
@@ -379,7 +379,7 @@ function createEntries(entries: KeyValueEntryConstructionData[] | undefined, tem
     : Array<KeyValueEntry<any>> {
     const types = templateInstance.data.kind === "single" ?
         [ templateInstance.data.type ] : templateInstance.data.types;
-    return createEntriesFromTypes(entries || [], types);
+    return createEntriesFromTypes(entries ?? [], types);
 }
 
 function editLastEntry(templateInstance: KeyValueInputTemplate): string {
@@ -395,7 +395,7 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
     if (lastEntry) {
         templateInstance.entries.dep.changed();
 
-        const editValue = lastEntry.editText || "";
+        const editValue = lastEntry.editText ?? "";
         lastEntry.set(undefined);
         templateInstance.partialEntry.set(lastEntry);
 

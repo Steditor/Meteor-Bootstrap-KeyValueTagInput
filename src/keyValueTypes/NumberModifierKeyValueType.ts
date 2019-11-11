@@ -109,7 +109,7 @@ export default class NumberModifierKeyValueType extends KeyValueType<NumberModif
 
         if (match) {
             return {
-                operator: match[1] as MathOperator || "=",
+                operator: match[1] as MathOperator ?? "=",
                 number: Number(match[2]),
             };
         } else {

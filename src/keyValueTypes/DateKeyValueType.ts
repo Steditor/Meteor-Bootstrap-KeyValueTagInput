@@ -71,7 +71,7 @@ export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
             const parsedDate = moment.utc(match[2], this._dateParseFormats, true);
             if (parsedDate.isValid()) {
                 return {
-                    operator: match[1] as CompOperator || "=",
+                    operator: match[1] as CompOperator ?? "=",
                     date: parsedDate.toDate(),
                 };
             } else {

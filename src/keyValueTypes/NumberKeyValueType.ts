@@ -78,7 +78,7 @@ export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
 
         if (match) {
             return {
-                operator: match[1] as CompOperator || "=",
+                operator: match[1] as CompOperator ?? "=",
                 number: Number(match[2]),
             };
         } else {

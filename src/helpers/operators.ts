@@ -32,7 +32,7 @@ export type CompOpSelector = (typeof compOperators)[keyof typeof compOperators][
 export const compOpsAndSymbols: Array<CompOpSymbol | CompOperator> = [ "<", ">", "<=", ">=", "!=", "=", "≤", "≥", "≠" ];
 
 export function compOpToSymbol(op: CompOpSymbol | CompOperator): CompOpSymbol {
-    return (compOperators[op as CompOperator] || { symbol: op }).symbol;
+    return compOperators[op as CompOperator]?.symbol ?? op;
 }
 
 export function compOpToSelector(op: CompOperator): CompOpSelector {
@@ -52,5 +52,5 @@ export type MathOpSymbol = (typeof mathOperators)[keyof typeof mathOperators];
 export const mathOpsAndSymbols: Array<MathOpSymbol | MathOperator> = [ "=", "*", "/", "+", "-", "÷" ];
 
 export function mathOpToSymbol(op: MathOpSymbol | MathOperator): MathOpSymbol {
-    return mathOperators[op as MathOperator] || op;
+    return mathOperators[op as MathOperator] ?? op;
 }
