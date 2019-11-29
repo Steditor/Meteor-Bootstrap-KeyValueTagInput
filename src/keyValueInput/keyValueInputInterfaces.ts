@@ -1,13 +1,13 @@
 import { KeyValueEntry, KeyValueEntryConstructionData, KeyValueType } from "../keyValueTypes";
 
 export interface KeyValueInputMultipleTypesData {
-    kind?: "multiple";
+    typeKind?: "multiple";
     types: Array<KeyValueType<any>>;
     fallbackType?: number;
 }
 
 interface KeyValueInputSingleTypeData {
-    kind: "single";
+    typeKind: "single";
     type: KeyValueType<any>;
 }
 

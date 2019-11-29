@@ -63,7 +63,7 @@ If the input should forward all string input not matching a key to a dedicated K
 
 ### Single key mode
 
-In order to just collect values for a single key, pass `kind="single"` to the input and pass a single KeyValueType to `type` (instead of an array to `types`).
+In order to just collect values for a single key, pass `typeKind="single"` to the input and pass a single KeyValueType to `type` (instead of an array to `types`).
 
 ### Single value mode
 

@@ -46,7 +46,7 @@ function KeyValueInputTemplate(): KeyValueInputTemplate {
 Template.keyValueInput.onCreated(function(this: KeyValueInputTemplate) {
     this.autorun(() => {
         const data = KeyValueInputTemplateData();
-        data.kind = data.kind ?? "multiple";
+        data.typeKind = data.typeKind ?? "multiple";
         data.valueKind = data.valueKind ?? "multiple";
     });
 
@@ -67,7 +67,7 @@ Template.keyValueInput.onRendered(function(this: KeyValueInputTemplate) {
 
 Template.keyValueInput.helpers({
     isSingle(): boolean {
-        return KeyValueInputTemplate().data.kind === "single";
+        return KeyValueInputTemplate().data.typeKind === "single";
     },
     defaultEntries(): Array<KeyValueEntry<any>> {
         return KeyValueInputTemplate().defaultEntries.get();
@@ -80,7 +80,7 @@ Template.keyValueInput.helpers({
     },
     availableTypes(): string {
         const data = KeyValueInputTemplateData();
-        return data.kind === "multiple" ? data.types.map((t) => t.label).join(": / ") + ":" : "";
+        return data.typeKind === "multiple" ? data.types.map((t) => t.label).join(": / ") + ":" : "";
     },
     suggestions(): KeyValueSuggestion[] | null {
         return KeyValueInputTemplate().suggestions.get();
@@ -117,7 +117,7 @@ Template.keyValueInput.events({
             }
         } else if (key === "Enter" || key === "Tab") {
             if (templateInstance.textInput.val() !== "" ||
-                (templateInstance.partialEntry.get() && templateInstance.data.kind !== "single")) {
+                (templateInstance.partialEntry.get() && templateInstance.data.typeKind !== "single")) {
                 if (key === "Enter" || templateInstance.data.valueKind !== "single") {
                     event.preventDefault();
                 }
@@ -204,7 +204,7 @@ Template.keyValueInput.events({
             if (!this.entry.isPartial) {
                 removeEntry(this.entry, templateInstance);
                 moveFocus(event, templateInstance, this.index!); // index should always be set for non-partial entries
-            } else if (templateInstance.data.kind !== "single") { // single type always needs a partial entry
+            } else if (templateInstance.data.typeKind !== "single") { // single type always needs a partial entry
                 templateInstance.partialEntry.set(null);
                 moveFocus(event, templateInstance, "ArrowRight");
             }
@@ -282,7 +282,7 @@ function moveFocus(event: Event, templateInstance: KeyValueInputTemplate,
 }
 
 function resetPartialEntry(templateInstance: KeyValueInputTemplate) {
-    if (templateInstance.data.kind === "single") {
+    if (templateInstance.data.typeKind === "single") {
         templateInstance.partialEntry.set(templateInstance.data.type.createPartialEntry());
     } else {
         templateInstance.partialEntry.set(null);
@@ -290,7 +290,7 @@ function resetPartialEntry(templateInstance: KeyValueInputTemplate) {
 }
 
 function addPartialEntry(val: string, templateInstance: KeyValueInputTemplate) {
-    if (templateInstance.partialEntry.get() || templateInstance.data.kind === "single"
+    if (templateInstance.partialEntry.get() || templateInstance.data.typeKind === "single"
     || (templateInstance.entries.get().length > 0 && templateInstance.data.valueKind === "single")) {
         return false;
     }
@@ -308,7 +308,7 @@ function addPartialEntry(val: string, templateInstance: KeyValueInputTemplate) {
 }
 
 function getFallbackType(templateInstance: KeyValueInputTemplate): KeyValueType<any> | undefined {
-    if (templateInstance.data.kind === "multiple" && templateInstance.data.fallbackType !== undefined) {
+    if (templateInstance.data.typeKind === "multiple" && templateInstance.data.fallbackType !== undefined) {
         return templateInstance.data.types[templateInstance.data.fallbackType];
     } else {
         return undefined;
@@ -377,13 +377,13 @@ function createDefaultEntries(templateInstance: KeyValueInputTemplate) {
 
 function createEntries(entries: KeyValueEntryConstructionData[] | undefined, templateInstance: KeyValueInputTemplate)
     : Array<KeyValueEntry<any>> {
-    const types = templateInstance.data.kind === "single" ?
+    const types = templateInstance.data.typeKind === "single" ?
         [ templateInstance.data.type ] : templateInstance.data.types;
     return createEntriesFromTypes(entries ?? [], types);
 }
 
 function editLastEntry(templateInstance: KeyValueInputTemplate): string {
-    if (templateInstance.data.kind !== "single") { // cannot edit partial entry of single mode input
+    if (templateInstance.data.typeKind !== "single") { // cannot edit partial entry of single mode input
         const partialEntry = templateInstance.partialEntry.get();
         if (partialEntry) {
             templateInstance.partialEntry.set(null);
