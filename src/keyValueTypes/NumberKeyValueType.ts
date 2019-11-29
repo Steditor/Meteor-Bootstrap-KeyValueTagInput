@@ -102,4 +102,13 @@ export default class NumberKeyValueType extends KeyValueType<NumberKeyValue> {
     public editText(value: SlackNumberKeyValue): string {
         return this.display(value).text;
     }
+
+    public isValueEqual(valueA?: NumberKeyValue, valueB?: NumberKeyValue): boolean {
+        if (super.isValueEqual(valueA, valueB)) { return true; }
+
+        if (valueA && valueB) {
+            return valueA.operator === valueB.operator && valueA.number === valueB.number;
+        }
+        return false;
+    }
 }

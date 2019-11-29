@@ -1,12 +1,30 @@
-import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
+import { KeyValueDisplay, KeyValueSuggestion } from "./KeyValueDatatypes";
 import { KeyValueEntry } from "./KeyValueEntry";
 import { KeyValueType } from "./KeyValueType";
 
-export default class TagKeyValueType extends KeyValueType<string> {
-    private _tags: string[] = [];
+export interface Tag {
+    value: string;
+    editString?: string;
+    display: KeyValueDisplay;
+}
 
-    set tags(tags: string[]) {
-        this._tags = tags;
+function stringToTag(value: string): Tag {
+    return { value, display: { text: value } };
+}
+
+function isTags(tags: string[] | Tag[]): tags is Tag[] {
+    return tags.length === 0 || typeof tags[0] !== "string";
+}
+
+export default class TagKeyValueType extends KeyValueType<Tag> {
+    private _tags: Tag[] = [];
+
+    set tags(tags: string[] | Tag[]) {
+        if (isTags(tags)) {
+            this._tags = tags;
+        } else {
+            this._tags = tags.map(stringToTag);
+        }
     }
 
     private _allowOther: boolean = false;
@@ -18,27 +36,32 @@ export default class TagKeyValueType extends KeyValueType<string> {
     public getSuggestions(prefix: string, entries: Array<KeyValueEntry<any>>, defaultEntries: Array<KeyValueEntry<any>>,
                           allowDuplicates: boolean): KeyValueSuggestion[] {
         const substringLower = prefix.toLowerCase();
-        let tags = this._tags.filter((t) => t.toLowerCase().includes(substringLower));
+        let tags = this._tags.filter((t) =>
+            t.value.toLowerCase().includes(substringLower) || t.editString?.toLowerCase().includes(substringLower),
+        );
         if (!allowDuplicates) {
             tags = tags.filter((t) =>
-                entries.every((e) => e.value !== t) &&
-                defaultEntries.every((e) => e.value !== t),
+                entries.every((e) => e.type === this && !this.isValueEqual(t, e.value)) &&
+                defaultEntries.every((e) => e.type === this && !this.isValueEqual(t, e.value)),
             );
         }
         return tags.map((t) => ({
-                display: { text: t },
-                match: prefix !== "" ? t : undefined,
-                value: t,
+                display: t.display,
+                match: prefix !== "" ?
+                    (t.value.toLowerCase().includes(substringLower) ? t.value : t.editString)
+                    : undefined,
+                value: t.value,
             }));
     }
 
-    public parseString(val: string): string | undefined {
-        if (this._allowOther && val.trim() !== "") { return val.trim(); }
+    public parseString(val: string): Tag | undefined {
         const value = val.trim().toLowerCase();
-        return this._tags.find((t) => t.toLowerCase() === value);
+        const tag = this._tags.find((t) => t.value.toLowerCase() === value || t.editString?.toLowerCase() === value);
+        if (tag) { return tag; }
+        if (this._allowOther && val.trim() !== "") { return stringToTag(val.trim()); }
     }
 
-    public checkValue(val: any): string | undefined {
+    public checkValue(val: any): Tag | undefined {
         if (typeof val === "string") {
             return this.parseString(val);
         } else {
@@ -46,11 +69,20 @@ export default class TagKeyValueType extends KeyValueType<string> {
         }
     }
 
-    public display(value: string): KeyValueTextDisplay {
-        return { text: value };
+    public display(value: Tag): KeyValueDisplay {
+        return value.display;
     }
 
-    public editText(value: string): string {
-        return value;
+    public editText(value: Tag): string {
+        return value.editString ?? value.value;
+    }
+
+    public isValueEqual(valueA?: Tag, valueB?: Tag): boolean {
+        if (super.isValueEqual(valueA, valueB)) { return true; }
+
+        if (valueA && valueB) {
+            return valueA.value === valueB.value;
+        }
+        return false;
     }
 }

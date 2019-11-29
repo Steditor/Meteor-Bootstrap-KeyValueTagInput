@@ -63,6 +63,10 @@ export abstract class KeyValueType<T> {
     public abstract editText(value: T): string;
 
     public isEqual(entryA: KeyValueEntry<T>, entryB: KeyValueEntry<any>): boolean {
-        return entryA.type === entryB.type && entryA.value === entryB.value;
+        return entryA.type === entryB.type && this.isValueEqual(entryA.value, entryB.value);
+    }
+
+    public isValueEqual(valueA?: T, valueB?: T): boolean {
+        return valueA === valueB;
     }
 }

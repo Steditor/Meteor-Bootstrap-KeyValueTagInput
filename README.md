@@ -138,3 +138,4 @@ You can get the corresponding mongo specifier by calling `mongoSpecifierFor` wit
 
 [`TagKeyValueType`](./src/keyValueTypes/TagKeyValueType.ts)s allow the user to either choose from a predefined set of tags or also input their own text.
 Set `tags` to a string array of the predefined values and `allowOther` to a boolean specifying whether other strings are accepted or not.
+You can also pass an array of tag objects that specify how they should be rendered.

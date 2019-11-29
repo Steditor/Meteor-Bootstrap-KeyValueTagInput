@@ -80,4 +80,13 @@ export default class RegexKeyValueType extends KeyValueType<RegexKeyValue> {
             return value.text;
         }
     }
+
+    public isValueEqual(valueA?: RegexKeyValue, valueB?: RegexKeyValue): boolean {
+        if (super.isValueEqual(valueA, valueB)) { return true; }
+
+        if (valueA && valueB) {
+            return valueA.regex === valueB.regex;
+        }
+        return false;
+    }
 }

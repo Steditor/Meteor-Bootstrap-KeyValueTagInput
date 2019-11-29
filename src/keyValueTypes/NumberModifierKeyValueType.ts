@@ -133,4 +133,13 @@ export default class NumberModifierKeyValueType extends KeyValueType<NumberModif
     public editText(value: SlackNumberModifierKeyValue): string {
         return this.display(value).text;
     }
+
+    public isValueEqual(valueA?: NumberModifierKeyValue, valueB?: NumberModifierKeyValue): boolean {
+        if (super.isValueEqual(valueA, valueB)) { return true; }
+
+        if (valueA && valueB) {
+            return valueA.operator === valueB.operator && valueA.number === valueB.number;
+        }
+        return false;
+    }
 }
