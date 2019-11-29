@@ -6,7 +6,12 @@ export interface KeyValueHtmlDisplay {
     html: string;
 }
 
-export type KeyValueDisplay = KeyValueTextDisplay | KeyValueHtmlDisplay;
+export interface KeyValueTemplateDisplay {
+    template: string;
+    data: object;
+}
+
+export type KeyValueDisplay = KeyValueTextDisplay | KeyValueHtmlDisplay | KeyValueTemplateDisplay;
 
 export interface KeyValueSuggestion {
     display: KeyValueDisplay;

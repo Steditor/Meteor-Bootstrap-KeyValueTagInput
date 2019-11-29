@@ -35,7 +35,15 @@
         {{#unless isSingle}}<span class="entry-key badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>{{/unless}}
         {{#unless entry.isPartial}}
             {{#let display=entry.display}}
-                <span class="entry-value badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}{{#unless default}} <i class="fa fa-times"></i>{{/unless}}</span>
+                <span class="entry-value badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}"><!--
+                    -->{{#if display.template}}<!--
+                        -->{{> Template.dynamic display}}<!--
+                    -->{{else}}<!--
+                        -->{{display.text}}<!--
+                        -->{{{display.html}}}<!--
+                    -->{{/if}}<!--
+                    -->{{#unless default}} <i class="fa fa-times"></i>{{/unless}}<!--
+                --></span>
             {{/let}}
         {{/unless}}
     </div>
@@ -45,7 +53,14 @@
     <div class="key-value-entry">
         <span class="entry-key badge {{#if classes.key}}{{classes.key}}{{else}}badge-light{{/if}}">{{entry.label}}</span>
         {{#let display=entry.display}}
-            <span class="entry-value badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}">{{display.text}}{{{display.html}}}</span>
+            <span class="entry-value badge {{#if classes.value}}{{classes.value}}{{else}}badge-dark{{/if}}"><!--
+                -->{{#if display.template}}<!--
+                    -->{{> Template.dynamic display}}<!--
+                -->{{else}}<!--
+                    -->{{display.text}}<!--
+                    -->{{{display.html}}}<!--
+                -->{{/if}}<!--
+            --></span>
         {{/let}}
     </div>
 </template>
@@ -53,7 +68,11 @@
 <template name="keyValueSuggestion">
     <a href="#" class="list-group-item list-group-item-action key-value-suggestion {{#if suggestion.fallback}}key-value-fallback-suggestion{{/if}}" tabindex="-1">
         <div class="d-flex w-100 justify-content-between">
-            <h6>{{suggestion.display.text}}{{{suggestion.display.html}}}</h6>
+            {{#if suggestion.display.template}}
+                {{> Template.dynamic suggestion.display}}
+            {{else}}
+                <h6>{{suggestion.display.text}}{{{suggestion.display.html}}}</h6>
+            {{/if}}
             <small>
                 {{#if suggestion.matchHtml}}
                     {{{suggestion.matchHtml}}}
