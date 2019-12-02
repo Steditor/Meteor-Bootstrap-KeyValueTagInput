@@ -23,8 +23,8 @@ export type KeyValueInputTemplateData = (KeyValueInputMultipleTypesData | KeyVal
     allowDuplicates?: boolean;
 };
 
-export interface KeyValueEntriesChangedEvent extends CustomEvent {
-    detail: Array<KeyValueEntry<any>>;
+export interface KeyValueEntriesChangedEvent<T = any> extends CustomEvent<Array<KeyValueEntry<T>>> {
+    detail: Array<KeyValueEntry<T>>;
 }
 
 export function clearEntries(keyValueInput: HTMLElement) {
