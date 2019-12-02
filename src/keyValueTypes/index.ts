@@ -4,7 +4,7 @@ import NumberKeyValueType from "./NumberKeyValueType";
 import NumberModifierKeyValueType from "./NumberModifierKeyValueType";
 import RegexKeyValueType from "./RegexKeyValueType";
 import SortKeyValueType from "./SortKeyValueType";
-import TagKeyValueType from "./TagKeyValueType";
+import TagKeyValueType, { Tag } from "./TagKeyValueType";
 
 export {
     BooleanKeyValueType,
@@ -14,6 +14,7 @@ export {
     RegexKeyValueType,
     SortKeyValueType,
     TagKeyValueType,
+    Tag,
 };
 
 export * from "./constructionHelpers";
