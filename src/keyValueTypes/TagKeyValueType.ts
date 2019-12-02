@@ -5,7 +5,7 @@ import { KeyValueType } from "./KeyValueType";
 export interface Tag {
     value: string;
     editString?: string;
-    display: KeyValueDisplay;
+    display?: KeyValueDisplay;
 }
 
 function stringToTag(value: string): Tag {
@@ -46,9 +46,9 @@ export default class TagKeyValueType extends KeyValueType<Tag> {
             );
         }
         return tags.map((t) => ({
-                display: t.display,
+                display: this.display(t),
                 match: prefix !== "" ?
-                    (t.value.toLowerCase().includes(substringLower) ? t.value : t.editString)
+                    ((t.editString ?? "").toLowerCase().includes(substringLower) ? t.editString : t.value)
                     : undefined,
                 value: t.value,
             }));
@@ -70,7 +70,7 @@ export default class TagKeyValueType extends KeyValueType<Tag> {
     }
 
     public display(value: Tag): KeyValueDisplay {
-        return value.display;
+        return value.display ?? { text: value.editString ?? value.value };
     }
 
     public editText(value: Tag): string {
