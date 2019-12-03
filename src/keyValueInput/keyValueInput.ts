@@ -416,7 +416,7 @@ function removeAllEntries(templateInstance: KeyValueInputTemplate) {
 }
 
 function emitChange(templateInstance: KeyValueInputTemplate) {
-    Tracker.flush();
+    if (!Tracker.inFlush()) { Tracker.flush(); }
     if (templateInstance.element) {
         const event: KeyValueEntriesChangedEvent = new CustomEvent(
             "keyValueEntriesChanged",

@@ -1,6 +1,6 @@
 {
   "name": "meteor-bootstrap_key-value-tag-input",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A reactive input field for tags and key-value data, developed for meteor apps running bootstrap.",
   "keywords": [
     "meteor",
