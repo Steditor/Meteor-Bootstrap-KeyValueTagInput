@@ -41,8 +41,8 @@ export default class TagKeyValueType extends KeyValueType<Tag> {
         );
         if (!allowDuplicates) {
             tags = tags.filter((t) =>
-                entries.every((e) => e.type === this && !this.isValueEqual(t, e.value)) &&
-                defaultEntries.every((e) => e.type === this && !this.isValueEqual(t, e.value)),
+                entries.every((e) => e.type !== this || !this.isValueEqual(t, e.value)) &&
+                defaultEntries.every((e) => e.type !== this || !this.isValueEqual(t, e.value)),
             );
         }
         return tags.map((t) => ({
