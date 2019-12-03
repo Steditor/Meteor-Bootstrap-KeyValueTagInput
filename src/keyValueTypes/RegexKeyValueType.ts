@@ -2,7 +2,7 @@ import { escapeRegexChars } from "../helpers/strings";
 import { KeyValueDisplay, KeyValueSuggestion } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 
-interface RegexKeyValue {
+export interface RegexKeyValue {
     text: string;
     printRegex?: string;
     regex: string;

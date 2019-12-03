@@ -1,17 +1,24 @@
 import BooleanKeyValueType from "./BooleanKeyValueType";
-import DateKeyValueType from "./DateKeyValueType";
-import NumberKeyValueType from "./NumberKeyValueType";
-import NumberModifierKeyValueType from "./NumberModifierKeyValueType";
-import RegexKeyValueType from "./RegexKeyValueType";
+import DateKeyValueType, { DateKeyValue, SlackDateKeyValue } from "./DateKeyValueType";
+import NumberKeyValueType, { NumberKeyValue, SlackNumberKeyValue } from "./NumberKeyValueType";
+import NumberModifierKeyValueType, { NumberModifierKeyValue, SlackNumberModifierKeyValue } from "./NumberModifierKeyValueType";
+import RegexKeyValueType, { RegexKeyValue } from "./RegexKeyValueType";
 import SortKeyValueType from "./SortKeyValueType";
 import TagKeyValueType, { Tag } from "./TagKeyValueType";
 
 export {
     BooleanKeyValueType,
     DateKeyValueType,
+    DateKeyValue,
+    SlackDateKeyValue,
     NumberKeyValueType,
+    NumberKeyValue,
+    SlackNumberKeyValue,
     NumberModifierKeyValueType,
+    NumberModifierKeyValue,
+    SlackNumberModifierKeyValue,
     RegexKeyValueType,
+    RegexKeyValue,
     SortKeyValueType,
     TagKeyValueType,
     Tag,

@@ -8,11 +8,11 @@ import { NumberDelimiters } from "../helpers/formatting";
 import { escapeRegexChars } from "../helpers/strings";
 import NumberFormat = Intl.NumberFormat;
 
-interface SlackNumberModifierKeyValue {
+export interface SlackNumberModifierKeyValue {
     operator: MathOpSymbol | MathOperator;
     number: number;
 }
-interface NumberModifierKeyValue extends SlackNumberModifierKeyValue {
+export interface NumberModifierKeyValue extends SlackNumberModifierKeyValue {
     operator: MathOperator;
 }
 

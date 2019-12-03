@@ -12,11 +12,11 @@ import { KeyValueSuggestion, KeyValueTextDisplay } from "./KeyValueDatatypes";
 import { KeyValueType } from "./KeyValueType";
 import NumberFormat = Intl.NumberFormat;
 
-interface SlackNumberKeyValue {
+export interface SlackNumberKeyValue {
     operator: CompOpSymbol | CompOperator;
     number: number;
 }
-interface NumberKeyValue extends SlackNumberKeyValue {
+export interface NumberKeyValue extends SlackNumberKeyValue {
     operator: CompOperator;
 }
 

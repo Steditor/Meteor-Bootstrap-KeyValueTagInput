@@ -10,11 +10,11 @@ import { KeyValueType } from "./KeyValueType";
 
 import moment from "moment";
 
-interface SlackDateKeyValue {
+export interface SlackDateKeyValue {
     operator: CompOpSymbol | CompOperator;
     date: Date;
 }
-interface DateKeyValue extends SlackDateKeyValue {
+export interface DateKeyValue extends SlackDateKeyValue {
     operator: CompOperator;
 }
 
