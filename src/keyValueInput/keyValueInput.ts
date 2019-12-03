@@ -58,6 +58,7 @@ Template.keyValueInput.onCreated(function(this: KeyValueInputTemplate) {
     this.autorun(() => createDefaultEntries(this));
     this.suggestions = new ReactiveVar(null);
     this.autorun(() => buildSuggestions(this));
+    this.autorun(() => emitChange(this));
 });
 
 Template.keyValueInput.onRendered(function(this: KeyValueInputTemplate) {
@@ -352,7 +353,6 @@ function completeEntry(val: string, templateInstance: KeyValueInputTemplate) {
     entries.push(newEntry);
 
     templateInstance.entries.dep.changed();
-    emitChange(templateInstance);
     return true;
 }
 
@@ -398,8 +398,6 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
         const editValue = lastEntry.editText ?? "";
         lastEntry.set(undefined);
         templateInstance.partialEntry.set(lastEntry);
-
-        emitChange(templateInstance);
         return editValue;
     }
 
@@ -409,14 +407,12 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
 function removeEntry(entry: KeyValueEntry<any>, templateInstance: KeyValueInputTemplate) {
     const filtered = templateInstance.entries.get().filter((e) => e !== entry);
     templateInstance.entries.set(filtered);
-    emitChange(templateInstance);
 }
 
 function removeAllEntries(templateInstance: KeyValueInputTemplate) {
     templateInstance.entries.set([]);
     resetPartialEntry(templateInstance);
     templateInstance.textInput.val("");
-    emitChange(templateInstance);
 }
 
 function emitChange(templateInstance: KeyValueInputTemplate) {
