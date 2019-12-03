@@ -23,6 +23,27 @@ export default class DateKeyValueType extends KeyValueType<DateKeyValue> {
         return { [compOpToSelector(value.operator)]: value.date };
     }
 
+    public static mongoDateExpressionFor(value: DateKeyValue, field: string): object {
+        switch (value.operator) {
+            case "<":
+            case ">=":
+                return { [field]: { [compOpToSelector(value.operator)]: moment(value.date).startOf("day").toDate() } };
+            case ">":
+            case "<=":
+                return { [field]: { [compOpToSelector(value.operator)]: moment(value.date).endOf("day").toDate() } };
+            case "=":
+                return { $and: [
+                        this.mongoDateExpressionFor({ date: value.date, operator: "<=" }, field),
+                        this.mongoDateExpressionFor({ date: value.date, operator: ">=" }, field),
+                    ]};
+            case "!=":
+                return { $or: [
+                        this.mongoDateExpressionFor({ date: value.date, operator: "<" }, field),
+                        this.mongoDateExpressionFor({ date: value.date, operator: ">" }, field),
+                    ]};
+        }
+    }
+
     private _dateFormat: string = "YYYY-MM-DD";
     set dateFormat(dateFormat: string) {
         this._dateFormat = dateFormat;
