@@ -34,7 +34,7 @@ interface KeyValueInputTemplate extends Blaze.TemplateInstance {
     suggestions: ReactiveVar<KeyValueSuggestions>;
 
     textInput: JQuery;
-    element: HTMLDivElement;
+    element?: HTMLDivElement;
 
     data: KeyValueInputTemplateData;
 }
@@ -417,16 +417,16 @@ function removeAllEntries(templateInstance: KeyValueInputTemplate) {
 
 function emitChange(templateInstance: KeyValueInputTemplate) {
     if (!Tracker.inFlush()) { Tracker.flush(); }
-    const event: KeyValueEntriesChangedEvent = new CustomEvent(
-        "keyValueEntriesChanged",
-        { detail: templateInstance.entries.get() },
-    );
-    if (templateInstance.element) {
-        Tracker.afterFlush(() => window.setTimeout(
-            () => templateInstance.element.dispatchEvent(event),
+    Tracker.afterFlush(() => {
+        const event: KeyValueEntriesChangedEvent = new CustomEvent(
+            "keyValueEntriesChanged",
+            { detail: templateInstance.entries.get() },
+        );
+        window.setTimeout(
+            () => templateInstance.element?.dispatchEvent(event),
             100,
-        )); // make sure keyValueInput stays responsive; apply changes a little later
-    }
+        ); // make sure keyValueInput stays responsive; apply changes a little later
+    });
 }
 
 function buildSuggestions(templateInstance: KeyValueInputTemplate) {
