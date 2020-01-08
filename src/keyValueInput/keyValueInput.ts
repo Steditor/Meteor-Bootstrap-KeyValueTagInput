@@ -405,10 +405,8 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
         emitEvent(event, templateInstance);
         templateInstance.entries.dep.changed();
 
-        const editValue = lastEntry.editText ?? "";
-        lastEntry.set(undefined);
-        templateInstance.partialEntry.set(lastEntry);
-        return editValue;
+        templateInstance.partialEntry.set(lastEntry.type.createPartialEntry());
+        return lastEntry.editText ?? "";
     }
 
     return "";
