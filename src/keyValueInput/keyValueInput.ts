@@ -10,7 +10,7 @@ import { KeyValueType } from "../keyValueTypes/KeyValueType";
 
 import { createEntriesFromTypes, KeyValueEntryConstructionData } from "../keyValueTypes/constructionHelpers";
 import {
-    KeyValueEntriesChangedEvent,
+    KeyValueEntriesChangedEvent, KeyValueEntriesRemovedEvent, KeyValueEntryAddedEvent, KeyValueEntryRemovedEvent,
     KeyValueInputMultipleTypesData,
     KeyValueInputTemplateData,
 } from "./keyValueInputInterfaces";
@@ -352,6 +352,11 @@ function completeEntry(val: string, templateInstance: KeyValueInputTemplate) {
     }
     entries.push(newEntry);
 
+    const event: KeyValueEntryAddedEvent = new CustomEvent(
+        "keyValueEntryAdded",
+        { detail: newEntry },
+    );
+    emitEvent(event, templateInstance);
     templateInstance.entries.dep.changed();
     return true;
 }
@@ -393,6 +398,11 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
 
     const lastEntry = templateInstance.entries.get().splice(-1, 1)[0];
     if (lastEntry) {
+        const event: KeyValueEntryRemovedEvent = new CustomEvent(
+            "keyValueEntryRemoved",
+            { detail: lastEntry },
+        );
+        emitEvent(event, templateInstance);
         templateInstance.entries.dep.changed();
 
         const editValue = lastEntry.editText ?? "";
@@ -407,20 +417,34 @@ function editLastEntry(templateInstance: KeyValueInputTemplate): string {
 function removeEntry(entry: KeyValueEntry<any>, templateInstance: KeyValueInputTemplate) {
     const filtered = templateInstance.entries.get().filter((e) => e !== entry);
     templateInstance.entries.set(filtered);
+    const event: KeyValueEntryRemovedEvent = new CustomEvent(
+        "keyValueEntryRemoved",
+        { detail: entry },
+    );
+    emitEvent(event, templateInstance);
 }
 
 function removeAllEntries(templateInstance: KeyValueInputTemplate) {
+    const entries = templateInstance.entries.get();
     templateInstance.entries.set([]);
     resetPartialEntry(templateInstance);
     templateInstance.textInput.val("");
+    const event: KeyValueEntriesRemovedEvent = new CustomEvent(
+        "keyValueEntriesRemoved",
+        { detail: entries },
+    );
+    emitEvent(event, templateInstance);
 }
 
 function emitChange(templateInstance: KeyValueInputTemplate) {
-    if (!Tracker.inFlush()) { Tracker.flush(); }
     const event: KeyValueEntriesChangedEvent = new CustomEvent(
         "keyValueEntriesChanged",
         { detail: templateInstance.entries.get() },
     );
+    emitEvent(event, templateInstance);
+}
+
+function emitEvent(event: CustomEvent, templateInstance: KeyValueInputTemplate) {
     Tracker.afterFlush(() => {
         window.setTimeout(
             () => templateInstance.element?.dispatchEvent(event),

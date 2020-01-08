@@ -27,6 +27,18 @@ export interface KeyValueEntriesChangedEvent<T = any> extends CustomEvent<Array<
     detail: Array<KeyValueEntry<T>>;
 }
 
+export interface KeyValueEntriesRemovedEvent<T = any> extends CustomEvent<Array<KeyValueEntry<T>>> {
+    detail: Array<KeyValueEntry<T>>;
+}
+
+export interface KeyValueEntryRemovedEvent<T = any> extends CustomEvent<KeyValueEntry<T>> {
+    detail: KeyValueEntry<T>;
+}
+
+export interface KeyValueEntryAddedEvent<T = any> extends CustomEvent<KeyValueEntry<T>> {
+    detail: KeyValueEntry<T>;
+}
+
 export function clearEntries(keyValueInput: HTMLElement) {
     keyValueInput.dispatchEvent(new CustomEvent("clearEntries"));
 }

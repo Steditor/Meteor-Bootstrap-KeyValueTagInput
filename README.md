@@ -42,6 +42,15 @@ Template.myTemplate.events({
     "keyValueEntriesChanged .filterInput"(event) {
         // event.detail will contain all key value entries.
     },
+    "keyValueEntryAdded .filterInput"(event) {
+        // event.detail will contain added key value entry.    
+    },
+    "keyValueEntryRemoved .filterInput"(event) {
+        // event.detail will contain removed key value entry.    
+    },
+    "keyValueEntriesRemoved .filterInput"(event) {
+        // event.detail will contain all removed key value entries.    
+    },
 });
 ```
 
