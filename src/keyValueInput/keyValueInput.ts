@@ -215,13 +215,13 @@ Template.keyValueInput.events({
         event.stopPropagation();
         (event.currentTarget as HTMLElement).focus();
     },
-    "click .key-value-entry .fa-times"(
+    "click .key-value-entry .remove-entry"(
         this: KeyValueEntryData, event: MouseEvent, templateInstance: KeyValueInputTemplate) {
         event.stopPropagation();
         removeEntry(this.entry, templateInstance);
         moveFocus(event, templateInstance, "text-input");
     },
-    "click .fa-times.remove-all"(event: MouseEvent, templateInstance: KeyValueInputTemplate) {
+    "click .remove-all"(event: MouseEvent, templateInstance: KeyValueInputTemplate) {
         event.stopPropagation();
         removeAllEntries(templateInstance);
         moveFocus(event, templateInstance, "text-input");

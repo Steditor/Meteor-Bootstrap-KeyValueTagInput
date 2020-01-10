@@ -14,7 +14,7 @@
     margin-top: 0.375rem;
   }
 
-  .fa-times {
+  .remove-entry, .remove-all {
     cursor: pointer;
     opacity: 0.6;
     line-height: inherit;
@@ -117,7 +117,7 @@
       .badge.entry-value {
         width: 100%;
       }
-      .fa-times {
+      .remove-entry {
         display: none;
       }
     }
